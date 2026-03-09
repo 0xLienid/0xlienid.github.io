@@ -87,6 +87,15 @@ a:hover {
   margin: 0.25em 0 1.5em 0;
 }
 
+.article a {
+  color: #0000ee;
+  text-decoration: underline;
+}
+
+.article a:visited {
+  color: #551a8b;
+}
+
 .article img {
   max-width: 100%;
   height: auto;
