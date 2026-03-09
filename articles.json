@@ -1,0 +1,8 @@
+[
+  {
+    "slug": "supervision-horizon-opsd",
+    "title": "The Supervision Horizon: An Exploration of the Mechanics of On-Policy Self-Distillation",
+    "date": "2026-03-09",
+    "summary": "An investigation into how the supervision signal in on-policy self-distillation degrades across the completion sequence, with experiments on Qwen3 1.7B over LiveCodeBench."
+  }
+]

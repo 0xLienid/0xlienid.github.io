@@ -1,20 +1,33 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body class="page">
-        <div class="header">
-            <a href="https://0xlienid.github.io">
-                <h1>0xlienid</h1>
-            </a>
-        </div>
-        
-        <div class="content">
-            <h3>articles</h3>
-            <a href="https://0xlienid.github.io/articles/tsa-ori">
-                Token Space Attention and Original Representation Interactions
-            </a>
-        </div>
-    </body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="page">
+    <div class="header">
+      <a href="/">
+        <h1>Matt Firth</h1>
+      </a>
+    </div>
+
+    <div class="content">
+      <h3>Articles</h3>
+      <ul id="article-list" class="article-list"></ul>
+    </div>
+
+    <script>
+      fetch('articles.json')
+        .then(r => r.json())
+        .then(articles => {
+          const list = document.getElementById('article-list');
+          articles.forEach(a => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="articles/${a.slug}/">${a.title}</a><span class="date">${a.date}</span>${a.summary ? `<p class="summary">${a.summary}</p>` : ''}`;
+            list.appendChild(li);
+          });
+        });
+    </script>
+  </body>
 </html>
