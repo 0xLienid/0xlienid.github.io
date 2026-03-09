@@ -1,5 +1,11 @@
 [
   {
+    "slug": "experiential-learning",
+    "title": "Experiential Learning: Learning from Unstructured Actions, Observations, and Feedback",
+    "date": "2025-05-27",
+    "summary": "Experiential Learning (EL) is a framework for training language models to learn directly from rich, token-space feedback like compiler errors and explanations rather than reducing signal to scalar rewards. On a 1B parameter model, EL boosted GSM8K accuracy from 30.4% to 39.8% and HumanEval by up to 17.6%, approaching GRPO performance while generalizing beyond verifiable domains."
+  },
+  {
     "slug": "supervision-horizon-opsd",
     "title": "The Supervision Horizon: An Exploration of the Mechanics of On-Policy Self-Distillation",
     "date": "2026-03-09",
