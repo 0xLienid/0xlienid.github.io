@@ -19,6 +19,19 @@
     });
   }
 
+  // Protect math blocks from markdown parser by replacing with placeholders
+  const mathBlocks = [];
+  // Display math ($$...$$) - must come before inline
+  md = md.replace(/\$\$([\s\S]*?)\$\$/g, (match, tex) => {
+    mathBlocks.push({ tex: tex.trim(), display: true });
+    return `\n\nMATHBLOCK_${mathBlocks.length - 1}\n\n`;
+  });
+  // Inline math ($...$)
+  md = md.replace(/\$([^\$\n]+?)\$/g, (match, tex) => {
+    mathBlocks.push({ tex: tex.trim(), display: false });
+    return `MATHBLOCK_${mathBlocks.length - 1}`;
+  });
+
   // Build header from frontmatter
   const article = document.getElementById('article');
   let headerHtml = '';
@@ -26,23 +39,23 @@
     headerHtml += `<h2>${meta.title}</h2>`;
     document.title = meta.title;
   }
-  if (meta.author) headerHtml += `<p class="author">${meta.author}</p>`;
-  if (meta.email) headerHtml += `<p class="email"><a href="mailto:${meta.email}">${meta.email}</a></p>`;
   if (meta.date) headerHtml += `<p class="date">${meta.date}</p>`;
 
   // Render markdown
-  article.innerHTML = headerHtml + marked.parse(md);
+  let html = headerHtml + marked.parse(md);
 
-  // Fix relative image paths (assets/ stays relative, works as-is)
-
-  // Render LaTeX with KaTeX
-  renderMathInElement(article, {
-    delimiters: [
-      { left: '$$', right: '$$', display: true },
-      { left: '$', right: '$', display: false },
-      { left: '\\[', right: '\\]', display: true },
-      { left: '\\(', right: '\\)', display: false },
-    ],
-    throwOnError: false,
+  // Restore math blocks, rendering with KaTeX
+  html = html.replace(/MATHBLOCK_(\d+)/g, (match, idx) => {
+    const block = mathBlocks[parseInt(idx)];
+    try {
+      return katex.renderToString(block.tex, {
+        displayMode: block.display,
+        throwOnError: false,
+      });
+    } catch (e) {
+      return block.tex;
+    }
   });
+
+  article.innerHTML = html;
 })();
