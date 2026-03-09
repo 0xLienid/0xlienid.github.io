@@ -9,11 +9,11 @@ I've spent most of the past year investigating various methods to achieve contin
 
 In on-policy distillation, given a dataset of prompts $\mathcal{D}$, a student model $\pi_\theta$, and a teacher model $\pi_T$, the student samples a completion $y \sim \pi_\theta(\cdot \mid x)$ for each prompt $x \in \mathcal{D}$. The teacher then provides a token-level distribution at each position $t$ conditioned on the prompt and the student's prefix $y_{<t}$. The on-policy distillation objective minimizes:
 
-$$\mathcal{L}_{\text{OPD}} = \mathbb{E}_{x \sim \mathcal{D},\; y \sim \pi_\theta(\cdot \mid x)} \left[ \sum_{t=1}^{|y|} D_{\text{KL}}\!\left( \pi_T(\cdot \mid x, y_{<t}) \;\|\; \pi_\theta(\cdot \mid x, y_{<t}) \right) \right]$$
+$$\mathcal{L}_{\text{OPD}} = \mathbb{E}_{x \sim \mathcal{D},\; y \sim \pi_\theta(\cdot \mid x)} \left[ \sum_{t=1}^{|y|} D_{\text{KL}}\!\left( \pi_\theta(\cdot \mid x, y_{<t}) \;\|\; \pi_T(\cdot \mid x, y_{<t}) \right) \right]$$
 
 More recently, a sub-field of on-policy distillation has begun to emerge, on-policy self-distillation [2, 7]. In the self-distillation variant, the student and teacher share the same weights $\theta$. The teacher is distinguished only by receiving privileged context $c$ — such as a gold-standard solution, or the student's attempt paired with environment feedback — appended to its input. The objective becomes:
 
-$$\mathcal{L}_{\text{OPSD}} = \mathbb{E}_{x \sim \mathcal{D},\; y \sim \pi_\theta(\cdot \mid x)} \left[ \sum_{t=1}^{|y|} D_{\text{KL}}\!\left( \pi_\theta(\cdot \mid x, y_{<t}, c) \;\|\; \pi_\theta(\cdot \mid x, y_{<t}) \right) \right]$$
+$$\mathcal{L}_{\text{OPSD}} = \mathbb{E}_{x \sim \mathcal{D},\; y \sim \pi_\theta(\cdot \mid x)} \left[ \sum_{t=1}^{|y|} D_{\text{KL}}\!\left( \pi_\theta(\cdot \mid x, y_{<t}) \;\|\; \pi_\theta(\cdot \mid x, y_{<t}, c) \right) \right]$$
 
 The critical thing to notice is that at every position $t$, both models condition on the student's sampled prefix $y_{<t}$. The teacher sees the privileged context $c$, but is still forced to provide corrections over a prefix it did not generate.
 
